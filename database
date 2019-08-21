@@ -1,0 +1,11 @@
+users :
+  name
+  username
+  password
+  gender
+  phone
+  avatar
+
+houses:
+  title
+  
