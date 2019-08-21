@@ -6,6 +6,16 @@ users :
   phone
   avatar
 
-houses:
+kostes:
   title
-  
+  address
+  location [lat, long]
+  type [putra, putri, campur]
+  large
+  total room
+  empty room
+  price per month
+  facilities
+  bathroom [luar, dalam]
+  info created_by
+  description

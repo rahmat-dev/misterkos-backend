@@ -20,7 +20,7 @@ exports.login = (req, res) => {
 
   User.findOne({where: {username, password}}).then(user => {
     if (user) {
-      const token = jwt.sign({ userId: user.id }, 'my-secret-key')
+      const token = jwt.sign({ id: user.id }, 'misterkos-secret')
       res.send({
         user,
         token,

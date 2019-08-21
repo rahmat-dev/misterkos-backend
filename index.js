@@ -4,8 +4,7 @@ require('express-group-routes')
 
 // Controllers
 const UserController = require('./controllers/user')
-// const OfferController = require('./controllers/offer')
-// const KosController = require('./controllers/kos')
+const KostController = require('./controllers/kost')
 
 const app = express()
 const port = 3000
@@ -18,12 +17,9 @@ app.group('/api', (router) => {
   router.post('/login', UserController.login)
   router.post('/register', UserController.register)
 
-  // Offer Route
-  // router.post('/offer', OfferController.create)
-
   // Kos Route
-  // router.get('/kos', KosController.index)
-  // router.get('/kos/:id', KosController.show)
+  router.get('/kost', KostController.index)
+  router.get('/kost/:id', KostController.show)
 
 })
 
