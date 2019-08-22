@@ -3,46 +3,54 @@ const jwt = require('jsonwebtoken')
 const models = require('../models')
 const User = models.user
 
-exports.show = (req, res) => {
-  const id = req.id
+// GET USER
+exports.show = async (req, res) => {
+  await User.findOne({
+    where: {
+      id: req.user.id
+    }
+  }).then(user => {
+    if (user) {
+      return res.status(200).send(user)
+    }
 
-  User.findOne({where: {id}}).then(user => {
-    res.send({
-      user
-    })
-  }).catch(error => {
-    console.log(error)
+    res.status(404, { detail: 'user not found' })
+  }).catch(err => {
+    console.log(err)
+    res.status(500).send({ detail: err })
   })
 }
 
+// LOGIN
 exports.login = (req, res) => {
   const { username, password } = req.body
 
-  User.findOne({where: {username, password}}).then(user => {
+  User.findOne({ where: { username, password } }).then(user => {
     if (user) {
-      const token = jwt.sign({ id: user.id }, 'misterkos-secret')
+      const token = jwt.sign({id: user.id}, 'misterkos-secret')
       res.send({
         user,
         token,
         valid: true
       })
     } else {
-      res.send({valid: false})
+      res.send({ valid: false })
     }
   })
 }
 
+// REGISTER
 exports.register = (req, res) => {
   const { name, username, password, gender, phone, avatar } = req.body
 
-  User.findOne({where: {username}}).then(user => {
+  User.findOne({ where: { username } }).then(user => {
     if (user) {
       res.send({
         error: true,
         message: 'Username sudah digunakan'
       })
     } else {
-      User.create({name, username, password, gender, phone, avatar: 'avatar.png'}).then(user => {
+      User.create({ name, username, password, gender, phone, avatar: 'avatar.png' }).then(user => {
         if (user) {
           res.send({
             user,

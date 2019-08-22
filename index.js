@@ -1,10 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
 require('express-group-routes')
 
 // Controllers
 const UserController = require('./controllers/user')
 const KostController = require('./controllers/kost')
+
+// Middlewares
+const { authenticated } = require('./middleware')
 
 const app = express()
 const port = 3000
@@ -12,14 +16,17 @@ const port = 3000
 app.use(bodyParser.json())
 
 app.group('/api', (router) => {
+  
+  // User Route
+  router.get('/user/me', authenticated, UserController.show)
+
   // Auth Route
-  router.get('/user/:id', UserController.show)
   router.post('/login', UserController.login)
   router.post('/register', UserController.register)
 
   // Kos Route
   router.get('/kost', KostController.index)
-  router.get('/kost/:id', KostController.show)
+  // router.get('/kost/:id', KostController.show)
 
 })
 
