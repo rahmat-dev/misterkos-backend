@@ -15,6 +15,10 @@ const port = 3000
 
 app.use(bodyParser.json())
 
+app.get('/', (req, res) => {
+  req.send("App")
+})
+
 app.group('/api', (router) => {
   
   // User Route
