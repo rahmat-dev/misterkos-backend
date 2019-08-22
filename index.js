@@ -16,7 +16,7 @@ const port = process.env.PORT || 3000
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-  req.send("App")
+  res.send("App")
 })
 
 app.group('/api', (router) => {
