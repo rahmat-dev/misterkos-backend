@@ -1,7 +1,16 @@
 const jwt = require('jsonwebtoken')
+const Cryptr = require('cryptr')
+const cryptr = new Cryptr('misterkos')
 
 const models = require('../models')
 const User = models.user
+
+// GET USERS
+exports.index = async (req, res) => {
+  await User.findAll()
+    .then(users => res.send(users))
+    .catch(err => res.send(err))
+}
 
 // GET USER
 exports.show = async (req, res) => {
@@ -14,7 +23,7 @@ exports.show = async (req, res) => {
       return res.status(200).send(user)
     }
 
-    res.status(404, { detail: 'user not found' })
+    res.status(404).send({ detail: 'user not found' })
   }).catch(err => {
     console.log(err)
     res.status(500).send({ detail: err })
@@ -25,16 +34,19 @@ exports.show = async (req, res) => {
 exports.login = (req, res) => {
   const { username, password } = req.body
 
-  User.findOne({ where: { username, password } }).then(user => {
+  User.findOne({ where: { username } }).then(user => {
     if (user) {
-      const token = jwt.sign({id: user.id}, 'misterkos-secret')
-      res.send({
-        user,
-        token,
-        valid: true
-      })
+      if (password == cryptr.decrypt(user.password)) {
+        const token = jwt.sign({ id: user.id }, 'misterkos-secret')
+        res.send({
+          token,
+          valid: true
+        })
+      } else {
+        res.send({ valid: false, message: 'Password Salah' })
+      }
     } else {
-      res.send({ valid: false })
+      res.send({ valid: false, message: 'User belum terdaftar' })
     }
   })
 }
@@ -50,11 +62,18 @@ exports.register = (req, res) => {
         message: 'Username sudah digunakan'
       })
     } else {
-      User.create({ name, username, password, gender, phone, avatar: 'avatar.png' }).then(user => {
+      User.create({
+        name,
+        username,
+        password: cryptr.encrypt(password),
+        gender,
+        phone,
+        avatar
+      }).then(user => {
         if (user) {
           res.send({
-            user,
-            error: false
+            error: false,
+            user
           })
         }
       }).catch(error => {

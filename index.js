@@ -11,7 +11,7 @@ const KostController = require('./controllers/kost')
 const { authenticated } = require('./middleware')
 
 const app = express()
-const port = process.env.PORT || 5500
+const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
 app.group('/api', (router) => {
   
   // User Route
+  router.get('/users', UserController.index)
   router.get('/user/me', authenticated, UserController.show)
 
   // Auth Route
@@ -30,7 +31,10 @@ app.group('/api', (router) => {
 
   // Kos Route
   router.get('/kost', KostController.index)
-  router.post('/kost', KostController.store)
+  router.get('/kost/:id', KostController.show)
+  router.post('/kost', authenticated, KostController.store)
+  router.patch('/kost/:id', authenticated, KostController.update)
+  router.delete('/kost/:id', authenticated, KostController.destroy)
 
 })
 
