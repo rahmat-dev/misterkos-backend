@@ -53,8 +53,9 @@ exports.login = (req, res) => {
 
 // REGISTER
 exports.register = (req, res) => {
-  const { name, username, password, gender, phone, avatar } = req.body
-
+  const { name, username, password, gender, phone } = req.body
+  const avatar = req.file.filename
+  
   User.findOne({ where: { username } }).then(user => {
     if (user) {
       res.send({
@@ -62,6 +63,7 @@ exports.register = (req, res) => {
         message: 'Username sudah digunakan'
       })
     } else {
+
       User.create({
         name,
         username,
