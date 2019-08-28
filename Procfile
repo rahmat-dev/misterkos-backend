@@ -1,2 +1,2 @@
-release: node_modules/.bin/sequelize db:migrate
+release: ./release.sh
 web: node index.js
