@@ -3,7 +3,12 @@ const Kost = models.kost
 const User = models.user
 
 exports.index = (req, res) => {
-  Kost.findAll().then(kosts => res.send(kosts))
+  Kost.findAll({
+    include: [{
+      model: User,
+      as: 'created_by'
+    }]
+  }).then(kosts => res.send(kosts))
 }
 
 exports.show = (req, res) => {
@@ -12,7 +17,11 @@ exports.show = (req, res) => {
     where: 
     {
       id
-    }
+    },
+    include: [{
+      model: User,
+      as: 'created_by'
+    }]
   }).then(kost => res.send(kost))
 }
 

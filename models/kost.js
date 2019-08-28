@@ -26,7 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT
   }, {});
   kost.associate = function(models) {
-    // associations can be defined here
+    kost.belongsTo(models.user, {
+      as: 'created_by',
+      foreignKey: 'createdBy'
+    })
   };
   return kost;
 };

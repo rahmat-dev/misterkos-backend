@@ -69,7 +69,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       createdBy: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
       description: {
         type: Sequelize.TEXT
