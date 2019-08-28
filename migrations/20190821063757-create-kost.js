@@ -16,7 +16,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      location: {
+      latitude: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      longitude: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -25,7 +29,11 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ['PUTRA', 'PUTRI', 'CAMPUR']
       },
-      large: {
+      long: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      wide: {
         allowNull: false,
         type: Sequelize.STRING
       },

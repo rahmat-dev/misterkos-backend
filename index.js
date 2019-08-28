@@ -11,11 +11,14 @@ const KostController = require('./controllers/kost')
 const { authenticated } = require('./middleware/auth')
 
 // config
-const avatarUpload = require('./middleware/avatarUpload')
+const avatarUpload = require('./middleware/avatar-upload')
+const kostUpload = require('./middleware/kost-upload')
 
 const app = express()
 const port = process.env.PORT || 3000
 
+// app.use(avatarUpload)
+// app.use(kostUpload)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use("/images", express.static(path.join(__dirname, "images")));
@@ -28,12 +31,12 @@ app.group('/api', (router) => {
 
   // Auth Route
   router.post('/login', UserController.login)
-  router.post('/register', avatarUpload.single('avatar'), UserController.register)
+  router.post('/register', avatarUpload, UserController.register)
 
   // Kos Route
   router.get('/kost', KostController.index)
   router.get('/kost/:id', KostController.show)
-  router.post('/kost', authenticated, KostController.store)
+  router.post('/kost', authenticated, kostUpload, KostController.store)
   router.patch('/kost/:id', authenticated, KostController.update)
   router.delete('/kost/:id', authenticated, KostController.destroy)
 
