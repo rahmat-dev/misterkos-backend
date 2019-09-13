@@ -53,8 +53,7 @@ exports.login = (req, res) => {
 
 // REGISTER
 exports.register = (req, res) => {
-  const { name, username, password, gender, phone } = req.body
-  const avatar = req.file.filename
+  const { name, username, password, gender, phone, avatar } = req.body
   
   User.findOne({ where: { username } }).then(user => {
     if (user) {
@@ -73,9 +72,11 @@ exports.register = (req, res) => {
         avatar
       }).then(user => {
         if (user) {
+          const token = jwt.sign({ id: user.id}, 'misterkos-secret')
+
           res.send({
-            error: false,
-            user
+            token,
+            error: false
           })
         }
       }).catch(error => {

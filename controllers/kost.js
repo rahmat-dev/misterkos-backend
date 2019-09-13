@@ -27,7 +27,11 @@ exports.show = (req, res) => {
 
 exports.store = async (req, res) => {
   const { ...data } = req.body
-  const { image1, image2, image3 } = req.files
+  const image = req.files
+
+  const image1 = image.image1[0].filename || null;
+  const image2 = image.image2 ? image.image2[0].filename : null
+  const image3 = image.image3 ? image.image3[0].filename : null
 
   await User.findOne({
     where: {
@@ -37,9 +41,7 @@ exports.store = async (req, res) => {
     if (user) {
       Kost.create({
         ...data,
-        image1: image1[0].filename,
-        image2: image2[0].filename,
-        image3: image3[0].filename,
+        image1, image2, image3,
         createdBy: user.id
       }).then(kost => {
         res.status(200).send({status: 'success'})
